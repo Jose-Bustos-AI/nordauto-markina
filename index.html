@@ -17,8 +17,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="img/renault8-cabina.jpg">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preload" as="image" href="coche/f001.webp">
+  <link rel="stylesheet" href="css/styles.css?v=2">
+  <link rel="stylesheet" href="css/vivo.css?v=2">
 
   <script type="application/ld+json">
   {
@@ -79,65 +80,67 @@
 
   <main id="main">
 
-    <!-- ============ HERO ============ -->
-    <section class="hero" aria-label="Presentación">
-      <div class="hero__slides" data-slider>
-        <figure class="hero__slide is-active">
-          <img src="img/renault8-cabina.jpg" alt="Renault 8 amarillo recién pintado dentro de la cabina de pintura de Nord-Auto" width="1200" height="1600" fetchpriority="high">
-          <figcaption>Renault 8 · recién salido de cabina</figcaption>
-        </figure>
-        <figure class="hero__slide">
-          <img src="img/pintura-rojo-enmascarado.jpg" alt="Coche rojo enmascarado listo para pintar en la cabina" width="1600" height="1200" loading="lazy">
-          <figcaption>Enmascarado y pintura en cabina</figcaption>
-        </figure>
-        <figure class="hero__slide">
-          <img src="img/fachada-portada.jpg" alt="Fachada del taller Nord-Auto en Erdotza etorbidea 40 con coches en la entrada" width="960" height="720" loading="lazy">
-          <figcaption>Erdotza etorbidea 40 · Markina-Xemein</figcaption>
-        </figure>
-      </div>
-      <div class="hero__shade" aria-hidden="true"></div>
-      <div class="hero__mist" aria-hidden="true"></div>
+    <!-- ============ PORTADA: el coche se pinta al bajar ============ -->
+    <section class="escena" id="escena" aria-label="Presentación">
+      <div class="fijo">
+        <div class="e-fondo" aria-hidden="true"></div><div class="e-rejilla" aria-hidden="true"></div>
+        <canvas id="coche" width="720" height="1280" aria-label="Coche que pasa del aparejo gris a pintado y barnizado mientras bajas"></canvas>
+        <div class="e-niebla" id="niebla" aria-hidden="true"></div>
+        <div class="e-carga" id="carga">PREPARANDO CABINA · 0 %</div>
 
-      <div class="hero__content wrap">
-        <p class="tape tape--hero" data-hero-in>Txapa eta pintura · Markina-Xemein</p>
-        <h1 class="hero__title" data-split>
-          Tu coche, <em>como el primer día.</em>
-        </h1>
-        <p class="hero__lead" data-hero-in>
-          Taller de chapa y pintura en Markina-Xemein. Reparamos golpes, bollos y arañazos
-          y pintamos en cabina, con un presupuesto claro y sin sorpresas.
-        </p>
-        <div class="hero__actions" data-hero-in>
-          <a class="btn btn--red btn--lg" href="#presupuesto">
-            Pedir presupuesto
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a class="btn btn--light btn--lg" href="tel:+34631794157">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
-            Llamar: 631 794 157
-          </a>
+        <!-- fase 0: portada -->
+        <div class="capa arriba" data-fase="0,0.13">
+          <span class="tape tape--hero">Txapa eta pintura · Markina-Xemein</span>
+          <h1 class="e-h1"><span style="white-space:nowrap">Tu coche,</span><em>como el primer día.</em></h1>
+          <a class="e-sello" href="#opiniones"><b>4,3</b><span class="e-est">★★★★<i>★</i></span><span>24 opiniones en Google</span></a>
         </div>
-        <ul class="hero__trust" data-hero-in>
-          <li><b>4,3<span class="star">★</span></b> en Google · 24 opiniones</li>
-          <li>Todas las aseguradoras</li>
-          <li>Vehículo de sustitución</li>
-        </ul>
-      </div>
+        <div class="capa abajo" data-fase="0,0.13">
+          <div class="e-botones">
+            <a class="btn btn--red btn--lg" href="#presupuesto">Pedir presupuesto</a>
+            <a class="btn btn--light btn--lg" href="tel:+34631794157">Llamar: 631 794 157</a>
+          </div>
+          <div class="e-pista">BAJA Y MÍRALO PINTAR<i></i></div>
+        </div>
 
-      <div class="hero__dots wrap" role="tablist" aria-label="Fotos del taller">
-        <button role="tab" aria-selected="true" aria-label="Foto 1"><span></span></button>
-        <button role="tab" aria-selected="false" aria-label="Foto 2"><span></span></button>
-        <button role="tab" aria-selected="false" aria-label="Foto 3"><span></span></button>
-        <p class="hero__caption" aria-live="polite">Renault 8 · recién salido de cabina</p>
+        <!-- fase 1: preparación -->
+        <div class="capa arriba oculto" data-fase="0.15,0.39">
+          <p class="e-paso">01 · Preparación</p>
+          <div class="e-titulo">Aparejo<em>y enmascarado.</em></div>
+          <p class="e-txt">Lijamos, aparejamos y tapamos cristales y faros con papel antes de pintar.</p>
+        </div>
+        <!-- fase 2: pintura -->
+        <div class="capa arriba oculto" data-fase="0.41,0.72">
+          <p class="e-paso">02 · Cabina de pintura</p>
+          <div class="e-titulo">Pintura<em>igualada a tu color.</em></div>
+          <p class="e-txt">Pasada a pasada, en cabina, para un acabado limpio y sin polvo.</p>
+        </div>
+        <!-- fase 3: barniz -->
+        <div class="capa arriba oculto" data-fase="0.74,0.9">
+          <p class="e-paso">03 · Barniz</p>
+          <div class="e-titulo">Fuera papel,<em>brillo de exposición.</em></div>
+        </div>
+        <!-- fase 4: elige color -->
+        <div class="capa arriba oculto" data-fase="0.9,1.01">
+          <div class="e-titulo">¿De qué color<em>lo quieres?</em></div>
+          <p class="e-txt">Toca un color y míralo en el coche.</p>
+        </div>
+        <div class="capa abajo oculto" data-fase="0.9,1.01">
+          <div class="colores" id="colores" role="radiogroup" aria-label="Elige un color de muestra"></div>
+          <p class="colores-nota">Colores de muestra · igualamos el código de pintura de tu coche</p>
+          <a class="btn btn--red btn--lg e-ancho" href="#presupuesto">Pedir presupuesto</a>
+        </div>
+
+        <svg class="lineas" id="lineas" aria-hidden="true"></svg>
+        <div id="etiquetas" aria-hidden="true"></div>
+        <div class="e-progreso" aria-hidden="true"><span id="eBarra"></span></div>
       </div>
-      <a class="hero__scroll" href="#servicios" aria-label="Bajar a servicios"><span></span></a>
     </section>
 
-    <!-- ============ CINTA ============ -->
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee__track">
-        <span>Chapa</span><i>✦</i><span>Pintura en cabina</span><i>✦</i><span>Bollos</span><i>✦</i><span>Arañazos</span><i>✦</i><span>Clásicos</span><i>✦</i><span>Llantas</span><i>✦</i><span>Furgonetas</span><i>✦</i><span>Todas las aseguradoras</span><i>✦</i><span>Txapa eta pintura</span><i>✦</i>
-        <span>Chapa</span><i>✦</i><span>Pintura en cabina</span><i>✦</i><span>Bollos</span><i>✦</i><span>Arañazos</span><i>✦</i><span>Clásicos</span><i>✦</i><span>Llantas</span><i>✦</i><span>Furgonetas</span><i>✦</i><span>Todas las aseguradoras</span><i>✦</i><span>Txapa eta pintura</span><i>✦</i>
+    <!-- ============ RÓTULO QUE CORRE CON EL SCROLL ============ -->
+    <div class="rotulo-caja" aria-hidden="true">
+      <div class="rotulo">
+        <div class="r-linea" id="rot1">Txapa eta pintura · Chapa y pintura · Cabina de pintura · Todas las aseguradoras · </div>
+        <div class="r-linea hueca" id="rot2">Markina-Xemein · Golpes · Bollos · Arañazos · Clásicos · Llantas · </div>
       </div>
     </div>
 
@@ -150,53 +153,59 @@
           <p class="section__lead" data-reveal>Cada coche que entra recibe un diagnóstico visual y técnico. Te explicamos el proceso y te damos un presupuesto claro antes de tocar nada.</p>
         </header>
 
-        <div class="services__grid">
-          <article class="card" data-reveal>
-            <div class="card__media"><img src="img/mercedes-glc-chapa.jpg" alt="Mercedes GLC blanco con el frontal en reparación dentro del taller" width="1200" height="1600" loading="lazy" data-parallax="0.08"></div>
-            <div class="card__body">
-              <span class="card__num">01</span>
+        <div class="pila" id="pila">
+          <article class="carta" style="--i:0">
+            <img src="img/mercedes-glc-chapa.jpg" alt="Mercedes GLC blanco con el frontal en reparación dentro del taller" loading="lazy">
+            <div class="carta__txt">
+              <span class="carta__num">01 / 06</span>
               <h3>Chapa y golpes</h3>
               <p>Golpes, abolladuras y daños de accidente. Desmontamos, enderezamos o sustituimos piezas para que la carrocería vuelva a encajar.</p>
+              <button class="carta__btn" type="button" data-serv="Chapa y golpes">Presupuesto de esto <span>→</span></button>
             </div>
           </article>
-          <article class="card" data-reveal>
-            <div class="card__media"><img src="img/pintura-rojo-enmascarado.jpg" alt="Coche rojo enmascarado con papel dentro de la cabina de pintura" width="1600" height="1200" loading="lazy" data-parallax="0.08"></div>
-            <div class="card__body">
-              <span class="card__num">02</span>
+          <article class="carta" style="--i:1">
+            <img src="img/pintura-rojo-enmascarado.jpg" alt="Coche rojo enmascarado con papel dentro de la cabina de pintura" loading="lazy">
+            <div class="carta__txt">
+              <span class="carta__num">02 / 06</span>
               <h3>Pintura en cabina</h3>
               <p>Pintado parcial o completo con el color de tu coche. Enmascaramos con cuidado y pintamos en cabina para un acabado limpio y duradero.</p>
+              <button class="carta__btn" type="button" data-serv="Pintura en cabina">Presupuesto de esto <span>→</span></button>
             </div>
           </article>
-          <article class="card" data-reveal>
-            <div class="card__media"><img src="img/renault8-cabina.jpg" alt="Renault 8 clásico pintado de amarillo en la cabina" width="1200" height="1600" loading="lazy" data-parallax="0.08"></div>
-            <div class="card__body">
-              <span class="card__num">03</span>
+          <article class="carta" style="--i:2">
+            <img src="img/renault8-cabina.jpg" alt="Renault 8 clásico pintado de amarillo en la cabina" loading="lazy">
+            <div class="carta__txt">
+              <span class="carta__num">03 / 06</span>
               <h3>Restauración de clásicos</h3>
               <p>Renault 8, Mercedes 190… Saneamos y pintamos coches con historia, con el tiempo y el detalle que piden.</p>
+              <button class="carta__btn" type="button" data-serv="Restauración de clásicos">Presupuesto de esto <span>→</span></button>
             </div>
           </article>
-          <article class="card" data-reveal>
-            <div class="card__media"><img src="img/llantas-pintura.jpg" alt="Cuatro llantas recién pintadas en gris en la cabina" width="382" height="510" loading="lazy" data-parallax="0.08"></div>
-            <div class="card__body">
-              <span class="card__num">04</span>
+          <article class="carta" style="--i:3">
+            <img src="img/llantas-pintura.jpg" alt="Cuatro llantas recién pintadas en gris en la cabina" loading="lazy">
+            <div class="carta__txt">
+              <span class="carta__num">04 / 06</span>
               <h3>Llantas</h3>
               <p>Llantas rozadas o con la pintura gastada: las preparamos y las pintamos para que luzcan como nuevas.</p>
+              <button class="carta__btn" type="button" data-serv="Llantas">Presupuesto de esto <span>→</span></button>
             </div>
           </article>
-          <article class="card" data-reveal>
-            <div class="card__media"><img src="img/camion-cabina.jpg" alt="Cabina de camión en reparación de chapa" width="1200" height="1600" loading="lazy" data-parallax="0.08"></div>
-            <div class="card__body">
-              <span class="card__num">05</span>
+          <article class="carta" style="--i:4">
+            <img src="img/camion-cabina.jpg" alt="Cabina de camión en reparación de chapa" loading="lazy">
+            <div class="carta__txt">
+              <span class="carta__num">05 / 06</span>
               <h3>Furgonetas y flotas</h3>
               <p>Furgonetas, vehículos de trabajo y flotas de empresa. Entendemos que cada día parado cuesta dinero.</p>
+              <button class="carta__btn" type="button" data-serv="Furgonetas y flotas">Presupuesto de esto <span>→</span></button>
             </div>
           </article>
-          <article class="card card--accent" data-reveal>
-            <div class="card__media"><img src="img/fachada-grua.jpg" alt="Coche llegando en grúa al taller con los rótulos Carrocería y Nord Auto al fondo" width="768" height="768" loading="lazy" data-parallax="0.08"></div>
-            <div class="card__body">
-              <span class="card__num">06</span>
+          <article class="carta" style="--i:5">
+            <img src="img/fachada-grua.jpg" alt="Coche llegando en grúa al taller con los rótulos Carrocería y Nord Auto al fondo" loading="lazy">
+            <div class="carta__txt">
+              <span class="carta__num">06 / 06</span>
               <h3>Siniestros y seguros</h3>
               <p>Trabajamos con todas las compañías y nos ocupamos de los trámites. Si lo necesitas, te dejamos vehículo de sustitución.</p>
+              <button class="carta__btn" type="button" data-serv="Siniestros y seguros">Presupuesto de esto <span>→</span></button>
             </div>
           </article>
         </div>
@@ -237,6 +246,16 @@
             <p>Revisado y listo, como el primer día. Con horarios flexibles para dejarlo y recogerlo.</p>
           </li>
         </ol>
+      </div>
+    </section>
+
+    <!-- ============ CIFRAS SOBRE LA FACHADA ============ -->
+    <section class="cifras" id="cifras" aria-label="El taller en cifras">
+      <div class="c-fondo" id="cFondo"></div>
+      <div class="wrap c-dentro">
+        <div class="c-item"><b data-cuenta="4.3" data-dec="1">4,3</b><span>Nota en Google</span></div>
+        <div class="c-item"><b data-cuenta="24">24</b><span>Opiniones</span></div>
+        <div class="c-item"><b>Todas</b><span>Las aseguradoras</span></div>
       </div>
     </section>
 
@@ -438,7 +457,7 @@
         <div class="ba__text">
           <p class="eyebrow" data-reveal>04 — Antes y después</p>
           <h2 class="section__title" data-reveal>Del golpe,<br><span>a como el primer día.</span></h2>
-          <p class="section__lead" data-reveal>Desliza para ver la diferencia. Un golpe frontal como este pasa por chapa, preparación y pintura en cabina antes de volver a la carretera.</p>
+          <p class="section__lead" data-reveal>Mira cómo pasa la pistola y luego desliza tú. Un golpe frontal como este pasa por chapa, preparación y pintura en cabina antes de volver a la carretera.</p>
           <ol class="ba__list" data-reveal>
             <li><b>Desmontaje y diagnóstico</b><span>Paragolpes, faro y piezas dañadas fuera. Revisamos lo que no se ve.</span></li>
             <li><b>Chapa</b><span>Enderezamos capó y aleta o sustituimos lo que no tiene arreglo.</span></li>
@@ -454,50 +473,26 @@
           </div>
           <span class="compare__tag compare__tag--before">Antes</span>
           <span class="compare__tag compare__tag--after">Después</span>
+          <span class="pistola" aria-hidden="true"><i></i></span>
           <div class="compare__handle" aria-hidden="true">
             <span class="compare__knob"><svg viewBox="0 0 24 24"><path d="M9 6 L3 12 L9 18 M15 6 L21 12 L15 18"/></svg></span>
           </div>
           <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Deslizar para comparar antes y después">
-          <figcaption class="compare__note">Foto final real del taller · «antes» recreado digitalmente para ilustrar el proceso</figcaption>
+          <figcaption class="compare__note">Foto final real del taller · “antes” recreado digitalmente para ilustrar el proceso</figcaption>
         </figure>
       </div>
     </section>
 
-    <!-- ============ TRABAJOS REALES ============ -->
-    <section class="section works" id="trabajos">
-      <div class="wrap">
-        <header class="section__head works__head">
-          <div>
-            <p class="eyebrow eyebrow--light" data-reveal>05 — Trabajos reales</p>
-            <h2 class="section__title section__title--light" data-reveal>Hecho en<br><span>Erdotza etorbidea 40.</span></h2>
-          </div>
-          <div class="filters" role="tablist" aria-label="Filtrar trabajos" data-reveal>
-            <button role="tab" aria-selected="true" data-filter="all">Todo</button>
-            <button role="tab" aria-selected="false" data-filter="chapa">Chapa</button>
-            <button role="tab" aria-selected="false" data-filter="pintura">Pintura</button>
-            <button role="tab" aria-selected="false" data-filter="clasicos">Clásicos</button>
-            <button role="tab" aria-selected="false" data-filter="taller">El taller</button>
-          </div>
-        </header>
-
-        <div class="gallery" data-gallery>
-          <figure class="shot shot--tall" data-cat="pintura clasicos"><button aria-label="Ampliar: Renault 8 recién pintado"><img src="img/renault8-cabina.jpg" alt="Renault 8 amarillo recién pintado en cabina" width="1200" height="1600" loading="lazy"></button><figcaption>Renault 8 recién salido de cabina</figcaption></figure>
-          <figure class="shot" data-cat="chapa"><button aria-label="Ampliar: Mercedes GLC en reparación"><img src="img/mercedes-glc-chapa.jpg" alt="Mercedes GLC con el capó abierto y el frontal en reparación" width="1200" height="1600" loading="lazy"></button><figcaption>Mercedes GLC · frontal en reparación</figcaption></figure>
-          <figure class="shot shot--wide" data-cat="pintura"><button aria-label="Ampliar: enmascarado antes de pintar"><img src="img/pintura-rojo-enmascarado.jpg" alt="Coche rojo enmascarado con papel antes de pintar" width="1600" height="1200" loading="lazy"></button><figcaption>Enmascarado antes de pintar</figcaption></figure>
-          <figure class="shot" data-cat="chapa"><button aria-label="Ampliar: golpe trasero"><img src="img/dacia-golpe-trasero.jpg" alt="Furgoneta Dacia blanca con golpe trasero antes de la reparación" width="1200" height="1600" loading="lazy"></button><figcaption>Golpe trasero · al llegar al taller</figcaption></figure>
-          <figure class="shot shot--wide" data-cat="clasicos"><button aria-label="Ampliar: clásico en restauración"><img src="img/clasico-restauracion.jpg" alt="Coche clásico beige con el vano motor al descubierto durante la restauración" width="1600" height="1200" loading="lazy"></button><figcaption>Clásico en plena restauración</figcaption></figure>
-          <figure class="shot" data-cat="clasicos taller"><button aria-label="Ampliar: Mercedes 190"><img src="img/mercedes-190.jpg" alt="Mercedes 190 negro a la entrada del taller" width="1200" height="1600" loading="lazy"></button><figcaption>Mercedes 190</figcaption></figure>
-          <figure class="shot" data-cat="chapa"><button aria-label="Ampliar: frontal desmontado"><img src="img/audi-frontal-chapa.jpg" alt="Audi azul con el paragolpes delantero desmontado" width="382" height="510" loading="lazy"></button><figcaption>Frontal desmontado para reparar</figcaption></figure>
-          <figure class="shot" data-cat="pintura"><button aria-label="Ampliar: llantas pintadas"><img src="img/llantas-pintura.jpg" alt="Llantas pintadas en gris dentro de la cabina" width="382" height="510" loading="lazy"></button><figcaption>Llantas recién pintadas</figcaption></figure>
-          <figure class="shot" data-cat="chapa"><button aria-label="Ampliar: cabina de camión"><img src="img/camion-cabina.jpg" alt="Cabina de camión blanca desmontada para reparar la chapa" width="1200" height="1600" loading="lazy"></button><figcaption>Cabina de camión</figcaption></figure>
-          <figure class="shot" data-cat="pintura"><button aria-label="Ampliar: furgoneta enmascarada"><img src="img/furgoneta-enmascarada.jpg" alt="Furgoneta gris enmascarada en la cabina de pintura" width="382" height="510" loading="lazy"></button><figcaption>Furgoneta lista para pintar</figcaption></figure>
-          <figure class="shot shot--wide" data-cat="taller"><button aria-label="Ampliar: fachada del taller"><img src="img/fachada-portada.jpg" alt="Fachada de Nord-Auto con coches aparcados delante" width="960" height="720" loading="lazy"></button><figcaption>La campa del taller</figcaption></figure>
-          <figure class="shot" data-cat="taller"><button aria-label="Ampliar: entrada del taller"><img src="img/fachada-audi.jpg" alt="Audi negro deportivo en la entrada del taller Nord Auto" width="1200" height="1600" loading="lazy"></button><figcaption>Entrada del taller</figcaption></figure>
-          <figure class="shot" data-cat="taller"><button aria-label="Ampliar: rótulo Nord Auto"><img src="img/fachada-nord-auto.jpg" alt="Entrada del taller con el rótulo Nord Auto y una furgoneta blanca" width="1200" height="1600" loading="lazy"></button><figcaption>Nord Auto · Erdotza 40</figcaption></figure>
-          <figure class="shot" data-cat="taller"><button aria-label="Ampliar: Seat León"><img src="img/seat-leon-fachada.jpg" alt="Seat León blanco delante de la nave del taller" width="1200" height="1600" loading="lazy"></button><figcaption>Seat León listo para entregar</figcaption></figure>
-          <figure class="shot" data-cat="taller"><button aria-label="Ampliar: Mini naranja"><img src="img/fachada-mini.jpg" alt="Mini naranja con franjas negras en la entrada del taller" width="382" height="510" loading="lazy"></button><figcaption>Mini en la entrada</figcaption></figure>
-          <figure class="shot" data-cat="taller"><button aria-label="Ampliar: llegada en grúa"><img src="img/grua-carroceria.jpg" alt="Grúa con varios coches delante de la nave de carrocería" width="382" height="510" loading="lazy"></button><figcaption>Llegada en grúa</figcaption></figure>
+    <!-- ============ TRABAJOS REALES: galería fijada ============ -->
+    <section class="galeria2" id="trabajos" aria-label="Trabajos reales">
+      <div class="g-fijo">
+        <div class="g-cab wrap">
+          <p class="eyebrow eyebrow--light">05 — Trabajos reales</p>
+          <h2 class="section__title section__title--light">Hecho en<br><span>Erdotza etorbidea 40.</span></h2>
+          <p class="g-cont"><b id="gNum">01</b> / <span id="gTot">10</span> · toca una foto para verla en grande</p>
         </div>
+        <div class="g-pista" id="gPista"></div>
+        <div class="g-barra"><span id="gBarra"></span></div>
       </div>
     </section>
 
@@ -511,19 +506,8 @@
           <p class="score__meta">24 opiniones en Google</p>
           <button class="link-arrow" type="button" data-reviews-jump>Leer las 24 opiniones ↓</button>
         </div>
-        <div class="quotes">
-          <blockquote class="quote-card" data-reveal>
-            <p>«Me pintaron y sanearon todo el coche con muy buena calidad. Muy profesionales y atentos. ¡Totalmente recomendable!»</p>
-            <cite>Cliente · Google</cite>
-          </blockquote>
-          <blockquote class="quote-card" data-reveal>
-            <p>«Muy cercanos y flexibles a la hora de dejar y recoger el coche.»</p>
-            <cite>Cliente · Google</cite>
-          </blockquote>
-          <blockquote class="quote-card" data-reveal>
-            <p>«Muy buenos profesionales, de los pocos que quedan, ¡la verdad!»</p>
-            <cite>Cliente · Google</cite>
-          </blockquote>
+        <div class="tira-op" aria-label="Opiniones de clientes en Google">
+          <div class="tira-op__pista"><blockquote class="quote-card"><span class="q-est">★★★★★</span><p>“Me pintaron y sanearon todo el coche con muy buena calidad. Muy profesionales y atentos. ¡Totalmente recomendable!”</p><cite>Jorge P. · Google</cite></blockquote><blockquote class="quote-card"><span class="q-est">★★★★★</span><p>“Llevé a pintar el coche y me quedé contento por cómo quedó y el trato recibido.”</p><cite>Iker E. · Google</cite></blockquote><blockquote class="quote-card"><span class="q-est">★★★★★</span><p>“Muy profesionales arreglando la chapa del coche […]”</p><cite>Susana F. · Google</cite></blockquote><blockquote class="quote-card"><span class="q-est">★★★★★</span><p>“Muy buenos profesionales, de los pocos que quedan, ¡la verdad!”</p><cite>Jamal A. · Google</cite></blockquote><blockquote class="quote-card"><span class="q-est">★★★★★</span><p>“Zuhar y su equipo son gente muy profesional, trato cercano y transparente. Recomendado 💯”</p><cite>Mikel Z. · Google</cite></blockquote><blockquote class="quote-card"><span class="q-est">★★★★★</span><p>“Todo fantástico y rápido, el chico muy atento, volveré sin duda.”</p><cite>Maitane D. · Google</cite></blockquote><blockquote class="quote-card"><span class="q-est">★★★★★</span><p>“Muy buen trato, muy profesionales, a un precio económico.”</p><cite>Iñigo U. · traducida del euskera · Google</cite></blockquote><blockquote class="quote-card"><span class="q-est">★★★★★</span><p>“Muy profesionales, cercanos y de confianza.”</p><cite>Mari Paz Z. · traducida del euskera · Google</cite></blockquote><blockquote class="quote-card" aria-hidden="true"><span class="q-est">★★★★★</span><p>“Me pintaron y sanearon todo el coche con muy buena calidad. Muy profesionales y atentos. ¡Totalmente recomendable!”</p><cite>Jorge P. · Google</cite></blockquote><blockquote class="quote-card" aria-hidden="true"><span class="q-est">★★★★★</span><p>“Llevé a pintar el coche y me quedé contento por cómo quedó y el trato recibido.”</p><cite>Iker E. · Google</cite></blockquote><blockquote class="quote-card" aria-hidden="true"><span class="q-est">★★★★★</span><p>“Muy profesionales arreglando la chapa del coche […]”</p><cite>Susana F. · Google</cite></blockquote><blockquote class="quote-card" aria-hidden="true"><span class="q-est">★★★★★</span><p>“Muy buenos profesionales, de los pocos que quedan, ¡la verdad!”</p><cite>Jamal A. · Google</cite></blockquote><blockquote class="quote-card" aria-hidden="true"><span class="q-est">★★★★★</span><p>“Zuhar y su equipo son gente muy profesional, trato cercano y transparente. Recomendado 💯”</p><cite>Mikel Z. · Google</cite></blockquote><blockquote class="quote-card" aria-hidden="true"><span class="q-est">★★★★★</span><p>“Todo fantástico y rápido, el chico muy atento, volveré sin duda.”</p><cite>Maitane D. · Google</cite></blockquote><blockquote class="quote-card" aria-hidden="true"><span class="q-est">★★★★★</span><p>“Muy buen trato, muy profesionales, a un precio económico.”</p><cite>Iñigo U. · traducida del euskera · Google</cite></blockquote><blockquote class="quote-card" aria-hidden="true"><span class="q-est">★★★★★</span><p>“Muy profesionales, cercanos y de confianza.”</p><cite>Mari Paz Z. · traducida del euskera · Google</cite></blockquote></div>
         </div>
       </div>
 
@@ -629,6 +613,7 @@
         <p><b>Síguenos</b><a href="https://www.facebook.com/NordAuto-Markina-61567149416049" target="_blank" rel="noopener">Facebook</a></p>
       </div>
     </div>
+    <p class="wrap footer__legal" style="opacity:.7">Modelo 3D del coche de la portada: "Car Concept" de Khronos Group (glTF Sample Assets), licencia CC BY 4.0, con materiales y animación propios. Los colores del selector son de muestra.</p>
     <p class="wrap footer__legal">© <span data-year>2026</span> Nord-Auto Markina · Aviso legal · Privacidad</p>
   </footer>
 
@@ -647,6 +632,7 @@
     <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Siguiente">›</button>
   </dialog>
 
-  <script src="js/main.js" defer></script>
+  <script src="js/main.js?v=2" defer></script>
+  <script src="js/vivo.js?v=2" defer></script>
 </body>
 </html>

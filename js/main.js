@@ -104,7 +104,7 @@
   const nav = $('.nav');
   const bar = $('.scrollbar span');
   const dock = $('.dock');
-  const heroEl = $('.hero');
+  const heroEl = $('.hero') || $('.escena');
   const parallax = $$('[data-parallax]');
   const steps = $('[data-steps]');
   const stepLine = steps && $('.steps__line', steps);
@@ -356,29 +356,7 @@
     range.addEventListener('input', () => set(range.value));
     range.addEventListener('pointerdown', () => box.classList.add('is-dragging'));
     addEventListener('pointerup', () => box.classList.remove('is-dragging'));
-    // al verlo por primera vez, el tirador hace un barrido para enseñar que se puede mover
-    const hint = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return;
-      hint.disconnect();
-      const keys = [[0, 50], [700, 82], [1500, 18], [2300, 50]];
-      const t0 = performance.now();
-      let touched = false;
-      range.addEventListener('pointerdown', () => { touched = true; }, { once: true });
-      const tick = (t) => {
-        if (touched) return;
-        const el = t - t0 - 500;
-        if (el < 0) return requestAnimationFrame(tick);
-        let i = keys.findIndex((k) => k[0] > el);
-        if (i === -1) { set(50); return; }
-        const [ta, va] = keys[i - 1], [tb, vb] = keys[i];
-        const k = (el - ta) / (tb - ta);
-        const e2 = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
-        set((va + (vb - va) * e2).toFixed(1));
-        requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    }, { threshold: 0.5 });
-    hint.observe(box);
+    // la pasada de pistola del primer vistazo está en vivo.js
   });
 
   /* ---------- Galería: filtros, inclinación y visor ---------- */
