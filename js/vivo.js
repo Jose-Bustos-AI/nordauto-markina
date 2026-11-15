@@ -6,14 +6,23 @@
   const suave = t => { t = lim(t); return t * t * (3 - 2 * t); };
   const tramo = (t, a, b) => suave((t - a) / (b - a));
 
+  /* =========== 0. Desplazamiento suave con rueda o trackpad (en el móvil, el nativo) =========== */
+  let lenis = null;
+  if (window.Lenis && matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1, anchors: { offset: -70 } });
+    const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); }; requestAnimationFrame(raf);
+  }
+  const irA = (el) => lenis ? lenis.scrollTo(el, { offset: -70 }) : el.scrollIntoView({ behavior: 'smooth' });
+
   /* =========== 1. Coche que se pinta al bajar =========== */
-  const N = 120, cv = $('#coche'), ctx = cv.getContext('2d');
+  const N = 150, cv = $('#coche'), ctx = cv.getContext('2d');
   const imgs = new Array(N); let cargadas = 0, actual = -1;
   const ruta = i => `coche/f${String(i + 1).padStart(3, '0')}.webp`;
   const carga = $('#carga');
   const orden = [0]; for (const p of [8, 4, 2, 1]) for (let i = 0; i < N; i += p) if (!orden.includes(i)) orden.push(i);
   orden.forEach(i => { const im = new Image(); im.decoding = 'async'; im.src = ruta(i);
-    im.onload = () => { imgs[i] = im; cargadas++; carga.textContent = `PREPARANDO CABINA · ${Math.round(cargadas / N * 100)} %`;
+    im.onload = async () => { let bm = im; try { bm = await createImageBitmap(im); } catch (_) { try { await im.decode(); } catch (__) {} }
+      imgs[i] = bm; cargadas++; carga.textContent = `PREPARANDO CABINA · ${Math.round(cargadas / N * 100)} %`;
       if (cargadas > 10) carga.style.opacity = 0; if (actual < 0 || i === 0) pintar(true); }; });
   const cerca = i => { for (let d = 0; d < N; d++) { if (imgs[i - d]) return imgs[i - d]; if (imgs[i + d]) return imgs[i + d]; } return null; };
 
@@ -26,7 +35,7 @@
   caja.insertAdjacentHTML('afterend', '');
   let pedidos = false;
   const pedirColores = () => { if (pedidos) return; pedidos = true;
-    COLORES.forEach(([k]) => { const im = new Image(); im.src = `coche/color-${k}.webp`; im.onload = () => { cImgs[k] = im; }; }); };
+    COLORES.forEach(([k]) => { const im = new Image(); im.src = `coche/color-${k}.webp`; im.onload = async () => { try { cImgs[k] = await createImageBitmap(im); } catch (_) { cImgs[k] = im; } }; }); };
   $$('button', caja).forEach(b => b.addEventListener('click', () => {
     const k = b.dataset.c; if (k === color) return;
     anterior = cImgs[color] || cerca(N - 1); color = k; mezclaT = 0;
@@ -53,8 +62,8 @@
   }
 
   // etiquetas de cinta que señalan cada zona (posiciones sacadas de Blender, una por fotograma)
-  const ETIQ = [['Parabrisas', 'Cristales con papel', 24, 46], ['Faro', 'Faros tapados', 27, 46],
-                ['Capó', 'Primera mano', 52, 68], ['Puerta', 'Color igualado', 62, 84], ['Aleta trasera', 'Barniz', 90, 112]];
+  const ETIQ = [['Parabrisas', 'Cristales con papel', 30, 58], ['Faro', 'Faros tapados', 34, 58],
+                ['Capó', 'Primera mano', 65, 85], ['Puerta', 'Color igualado', 78, 105], ['Aleta trasera', 'Barniz', 112, 140]];
   const capaL = $('#lineas'), capaE = $('#etiquetas'); let puntos = null, piezas = [];
   fetch('coche/puntos.json').then(r => r.json()).then(j => {
     puntos = j; const ns = 'http://www.w3.org/2000/svg';
@@ -66,13 +75,14 @@
       return { p, e, l, c, h, a, b };
     });
   }).catch(() => {});
+  let rCv = null;
   function etiquetas(fr) {
     if (!puntos) return;
-    const r = cv.getBoundingClientRect(), W = innerWidth, M = 14;
+    const r = rCv, W = innerWidth, M = 14;
     for (const q of piezas) {
       const o = fr < q.a || fr > q.b ? 0 : Math.min(1, (fr - q.a) / 4, (q.b - fr) / 4);
       const [x, y] = puntos[q.p][lim(fr, 0, N - 1)];
-      const px = r.left + x * r.width, py = r.top + y * r.height, w = q.e.offsetWidth;
+      const px = r.left + x * r.width, py = r.top + y * r.height, w = q.w || (q.w = q.e.offsetWidth);
       const izq = px < W / 2, ey = py - (izq ? 64 : 76);
       const ex = izq ? Math.max(M, px - w - 10) : Math.min(W - M - w, px + 10);
       const ax = izq ? ex + w : ex;
@@ -84,15 +94,18 @@
   }
   function nieblaPintura(t, fr) {
     const k = tramo(t, 0.40, 0.70), o = k > 0 && k < 1 ? Math.sin(Math.PI * k) : 0;
+    if (!o && niebla.style.opacity === '0') return;
     niebla.style.opacity = (o * 0.85).toFixed(2);
     if (!puntos || !o) return;
-    const r = cv.getBoundingClientRect(), a = puntos['Faro'][fr], b = puntos['Aleta trasera'][fr];
+    const r = rCv, a = puntos['Faro'][fr], b = puntos['Aleta trasera'][fr];
     const x = r.left + (a[0] + (b[0] - a[0]) * k) * r.width;
     niebla.style.setProperty('--nx', (x - innerWidth / 2) + 'px');
   }
   function bucle() {
     objetivo = progreso();
-    mostrado += (objetivo - mostrado) * 0.16;
+    if (objetivo > 0.999 && mostrado > 0.999 && mezclaT >= 1 || (objetivo === 0 && mostrado === 0 && actual === 0)) { requestAnimationFrame(bucle); return; }
+    rCv = cv.getBoundingClientRect();
+    mostrado += (objetivo - mostrado) * 0.2;
     if (Math.abs(objetivo - mostrado) < 0.0005) mostrado = objetivo;
     const fr = Math.round(mostrado * (N - 1));
     if (mostrado > 0.8) pedirColores();
@@ -112,7 +125,7 @@
   $$('.carta__btn').forEach(b => b.addEventListener('click', () => {
     const nota = $('textarea[name="nota"]');
     if (nota) { nota.value = `Servicio: ${b.dataset.serv}. ` + nota.value.replace(/^Servicio: [^.]*\. /, ''); nota.dispatchEvent(new Event('input', { bubbles: true })); }
-    $('#presupuesto').scrollIntoView({ behavior: 'smooth' });
+    irA($('#presupuesto'));
   }));
 
   /* =========== 3. Cifras que suben =========== */
@@ -135,13 +148,14 @@
   $('#gTot').textContent = String(FOTOS.length).padStart(2, '0');
   const gfotos = $$('.g-foto');
   const altoGaleria = () => { sec.style.height = (innerHeight + Math.max(0, pista.scrollWidth - innerWidth) * 1.1) + 'px'; };
-  altoGaleria(); addEventListener('resize', altoGaleria); addEventListener('load', altoGaleria);
+  let anchoAnt = innerWidth; altoGaleria(); addEventListener('load', altoGaleria);
+  addEventListener('resize', () => { if (innerWidth !== anchoAnt) { anchoAnt = innerWidth; altoGaleria(); } });
 
   document.body.insertAdjacentHTML('beforeend', '<div class="visor" id="visor" aria-hidden="true"><button class="v-cerrar" id="vCerrar" aria-label="Cerrar">✕</button><button class="v-ant" id="vAnt" aria-label="Anterior">‹</button><figure><img id="vImg" alt=""><figcaption id="vTxt"></figcaption></figure><button class="v-sig" id="vSig" aria-label="Siguiente">›</button></div>');
   const visor = $('#visor'), vImg = $('#vImg'), vTxt = $('#vTxt'); let act = 0;
   const mostrar = i => { act = (i + FOTOS.length) % FOTOS.length; vImg.src = `img/${FOTOS[act][1]}.jpg`; vImg.alt = FOTOS[act][0]; vTxt.textContent = `${FOTOS[act][0]} · ${act + 1} / ${FOTOS.length}`; };
-  const abrirV = i => { mostrar(i); visor.classList.add('on'); visor.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; };
-  const cerrarV = () => { visor.classList.remove('on'); visor.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; };
+  const abrirV = i => { mostrar(i); visor.classList.add('on'); visor.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; lenis && lenis.stop(); };
+  const cerrarV = () => { visor.classList.remove('on'); visor.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; lenis && lenis.start(); };
   gfotos.forEach(f => f.addEventListener('click', () => abrirV(+f.dataset.i)));
   $('#vCerrar').addEventListener('click', cerrarV); $('#vAnt').addEventListener('click', () => mostrar(act - 1)); $('#vSig').addEventListener('click', () => mostrar(act + 1));
   visor.addEventListener('click', e => { if (e.target === visor) cerrarV(); });
@@ -183,8 +197,9 @@
     rot1.style.transform = `translateX(${-((y * 0.5) % w1)}px)`;
     rot2.style.transform = `translateX(${-w2 + ((y * 0.35) % w2)}px)`;
     // cartas: la de debajo se hunde cuando llega la siguiente
+    const rr = cartas.map(c => c.getBoundingClientRect());   // primero se lee todo, luego se escribe
     for (let i = 0; i < cartas.length - 1; i++) {
-      const a = cartas[i].getBoundingClientRect(), b = cartas[i + 1].getBoundingClientRect();
+      const a = rr[i], b = rr[i + 1];
       const k = lim(1 - (b.top - a.top) / a.height);
       cartas[i].style.transform = k > 0 ? `scale(${(1 - k * 0.07).toFixed(4)})` : '';
       cartas[i].style.filter = k > 0 ? `brightness(${(1 - k * 0.45).toFixed(3)})` : '';
@@ -197,8 +212,9 @@
       pista.style.transform = `translateX(${-p * mover}px)`;
       barraG.style.transform = `scaleX(${p})`;
       let c = 0, dmin = 1e9;
+      const rg = gfotos.map(f => f.getBoundingClientRect());
       gfotos.forEach((f, i) => {
-        const r = f.getBoundingClientRect(), d = (r.left + r.width / 2 - innerWidth / 2) / innerWidth;
+        const r = rg[i], d = (r.left + r.width / 2 - innerWidth / 2) / innerWidth;
         if (Math.abs(d) < dmin) { dmin = Math.abs(d); c = i; }
         f.firstElementChild.firstElementChild.style.transform = `scale(${1.2 - Math.min(.15, Math.abs(d) * .2)}) translateX(${d * -40}px)`;
         f.firstElementChild.style.transform = `rotateY(${lim(d * -22, -18, 18)}deg)`;

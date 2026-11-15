@@ -18,8 +18,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="coche/f001.webp">
-  <link rel="stylesheet" href="css/styles.css?v=2">
-  <link rel="stylesheet" href="css/vivo.css?v=2">
+  <link rel="stylesheet" href="css/styles.css?v=6">
+  <link rel="stylesheet" href="css/vivo.css?v=6">
+  <link rel="stylesheet" href="css/parte.css?v=6">
 
   <script type="application/ld+json">
   {
@@ -265,108 +266,58 @@
         <header class="section__head section__head--center">
           <p class="eyebrow" data-reveal>03 — Presupuesto en 1 minuto</p>
           <h2 class="section__title" data-reveal>Marca el daño.<br><span>Nosotros te decimos cuánto.</span></h2>
-          <p class="section__lead" data-reveal>Señala sobre el plano qué piezas están tocadas y envíanos el parte por WhatsApp. Te contestamos con el presupuesto en cuanto veamos las fotos.</p>
+          <p class="section__lead" data-reveal>Marca en el coche dónde está cada daño, de qué tipo es y cómo de grave, y envíanos el parte por WhatsApp. Te contestamos con el presupuesto en cuanto veamos las fotos.</p>
         </header>
 
-        <div class="desk" data-reveal>
-          <!-- barra superior tipo orden de trabajo -->
-          <div class="desk__bar">
-            <div class="desk__brand">
-              <span class="desk__dot"></span>
-              <b>Orden de reparación</b>
-              <span class="desk__ref" data-ref>Ref. NA-0000-000</span>
-            </div>
-            <ol class="desk__steps" aria-label="Pasos">
-              <li class="is-on" data-step="1"><span>1</span>Tipo de daño</li>
-              <li data-step="2"><span>2</span>Piezas</li>
-              <li data-step="3"><span>3</span>Tus datos</li>
+        <div class="peri" data-reveal>
+          <div class="peri__bar">
+            <div class="peri__marca"><span class="peri__led"></span><b>Peritaje online</b><span class="peri__ref" data-ref>Ref. NA-0000-000</span></div>
+            <ol class="peri__pasos" aria-label="Pasos">
+              <li class="is-on" data-step="1"><span>1</span>Marca los daños</li>
+              <li data-step="2"><span>2</span>Tus datos</li>
+              <li data-step="3"><span>3</span>Envío</li>
             </ol>
           </div>
 
-          <div class="desk__body">
-            <!-- Plano técnico -->
-            <div class="blueprint">
-              <div class="tools" role="radiogroup" aria-label="Tipo de daño">
-                <button class="tool is-active" type="button" role="radio" aria-checked="true" data-tool="arañazo" style="--c:var(--d-scratch)">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18 L11 11 M8 20 L18 10 M13 19 L20 12"/></svg>
-                  <b>Arañazo</b><small>Superficial</small>
-                </button>
-                <button class="tool" type="button" role="radio" aria-checked="false" data-tool="bollo" style="--c:var(--d-dent)">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9 C8 9 8 15 12 15 C16 15 16 9 21 9"/><path d="M3 5 H21" opacity=".4"/></svg>
-                  <b>Bollo</b><small>Chapa hundida</small>
-                </button>
-                <button class="tool" type="button" role="radio" aria-checked="false" data-tool="golpe" style="--c:var(--d-crash)">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 L14 9 L20 7 L16 12 L21 16 L14.5 15.5 L13 21 L10.5 15.5 L4 17 L8 12 L3 7 L9.5 9 Z"/></svg>
-                  <b>Golpe</b><small>Rotura o pieza</small>
-                </button>
-                <button class="tool" type="button" role="radio" aria-checked="false" data-tool="pintar" style="--c:var(--d-paint)">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 14 h9 v6 H5 Z M14 16 h3 a2 2 0 0 0 2 -2 V8 h-4"/><path d="M9 14 V9 h6 V4 H8"/></svg>
-                  <b>Pintar</b><small>Sin daño de chapa</small>
-                </button>
+          <div class="peri__body">
+            <div class="peri__visor">
+              <div class="vistas" role="tablist" aria-label="Vista del coche">
+                <button role="tab" aria-selected="true" data-v="izquierda">Izquierda<i data-n="izquierda"></i></button>
+                <button role="tab" aria-selected="false" data-v="arriba">Arriba<i data-n="arriba"></i></button>
+                <button role="tab" aria-selected="false" data-v="derecha">Derecha<i data-n="derecha"></i></button>
+                <button role="tab" aria-selected="false" data-v="delante">Delante<i data-n="delante"></i></button>
+                <button role="tab" aria-selected="false" data-v="detras">Detrás<i data-n="detras"></i></button>
               </div>
+              <div class="lienzo" id="lienzo">
+                <span class="lz-esq lz-esq--1"></span><span class="lz-esq lz-esq--2"></span><span class="lz-esq lz-esq--3"></span><span class="lz-esq lz-esq--4"></span>
+                <span class="lz-eje" id="lzEje"></span>
+                <figure class="lz-coche" id="lzCoche">
+                  <img id="lzImg" src="parte/izquierda.webp" alt="Coche visto desde el lado izquierdo" draggable="false">
+                  <svg class="lz-zona" id="lzZona" preserveAspectRatio="none" aria-hidden="true"></svg>
+                  <div class="lz-pines" id="lzPines"></div>
+                  <span class="lz-mira" id="lzMira" aria-hidden="true"></span>
+                </figure>
+                <p class="lz-zonaTxt" id="lzZonaTxt" aria-live="polite">Toca justo donde está el daño</p>
 
-              <div class="blueprint__stage">
-                <span class="bp-corner bp-corner--tl" aria-hidden="true"></span><span class="bp-corner bp-corner--tr" aria-hidden="true"></span>
-                <span class="bp-corner bp-corner--bl" aria-hidden="true"></span><span class="bp-corner bp-corner--br" aria-hidden="true"></span>
-                <span class="bp-label bp-label--top" aria-hidden="true">Frontal</span>
-                <span class="bp-label bp-label--bottom" aria-hidden="true">Trasera</span>
-                <span class="bp-label bp-label--left" aria-hidden="true">Izquierda</span>
-                <span class="bp-label bp-label--right" aria-hidden="true">Derecha</span>
-
-                <svg class="car" viewBox="-20 0 360 644" role="group" aria-label="Plano del coche visto desde arriba. Toca las piezas dañadas.">
-                  <defs>
-                    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                      <line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1.2" opacity=".35"/>
-                    </pattern>
-                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="10"/></filter>
-                  </defs>
-                  <!-- cotas -->
-                  <g class="dim" aria-hidden="true">
-                    <path d="M-6 36 V608 M-12 36 H0 M-12 608 H0"/>
-                    <path d="M64 626 H256 M64 620 V632 M256 620 V632"/>
-                    <text x="-10" y="322" transform="rotate(-90 -10 322)">Largo</text>
-                    <text x="160" y="642">Ancho</text>
-                  </g>
-                  <!-- silueta -->
-                  <path class="body-glow" d="M64 82 C64 54 98 38 160 36 C222 38 256 54 256 82 L256 576 C256 596 222 606 160 608 C98 606 64 596 64 576 Z"/>
-                  <!-- ruedas / llantas -->
-                  <rect class="part part--wheel" data-part="Llanta delantera izquierda" x="38" y="120" width="24" height="76" rx="9"/>
-                  <rect class="part part--wheel" data-part="Llanta delantera derecha" x="258" y="120" width="24" height="76" rx="9"/>
-                  <rect class="part part--wheel" data-part="Llanta trasera izquierda" x="38" y="474" width="24" height="76" rx="9"/>
-                  <rect class="part part--wheel" data-part="Llanta trasera derecha" x="258" y="474" width="24" height="76" rx="9"/>
-                  <!-- carrocería -->
-                  <path class="part" data-part="Paragolpes delantero" d="M64 96 L64 82 C64 54 98 38 160 36 C222 38 256 54 256 82 L256 96 Z"/>
-                  <path class="part" data-part="Capó" d="M98 100 L222 100 L216 216 C190 210 130 210 104 216 Z"/>
-                  <path class="part" data-part="Aleta delantera izquierda" d="M64 108 C64 103 67 100 72 100 L94 100 L100 218 L64 218 Z"/>
-                  <path class="part" data-part="Aleta delantera derecha" d="M256 108 C256 103 253 100 248 100 L226 100 L220 218 L256 218 Z"/>
-                  <path class="glass" d="M104 222 C130 216 190 216 216 222 L206 272 C180 268 140 268 114 272 Z"/>
-                  <path class="part" data-part="Techo" d="M114 278 C140 274 180 274 206 278 L206 424 C180 428 140 428 114 424 Z"/>
-                  <path class="glass" d="M114 430 C140 434 180 434 206 430 L214 472 C190 478 130 478 106 472 Z"/>
-                  <path class="part" data-part="Puerta delantera izquierda" d="M64 222 L100 222 L110 276 L110 350 L64 350 Z"/>
-                  <path class="part" data-part="Puerta delantera derecha" d="M256 222 L220 222 L210 276 L210 350 L256 350 Z"/>
-                  <path class="part" data-part="Puerta trasera izquierda" d="M64 354 L110 354 L110 424 L104 470 L64 470 Z"/>
-                  <path class="part" data-part="Puerta trasera derecha" d="M256 354 L210 354 L210 424 L216 470 L256 470 Z"/>
-                  <path class="part" data-part="Aleta trasera izquierda" d="M64 474 L100 474 L94 562 L64 562 Z"/>
-                  <path class="part" data-part="Aleta trasera derecha" d="M256 474 L220 474 L226 562 L256 562 Z"/>
-                  <path class="part" data-part="Maletero / portón" d="M104 478 C130 484 190 484 216 478 L222 562 L98 562 Z"/>
-                  <path class="part" data-part="Paragolpes trasero" d="M64 566 L256 566 L256 576 C256 596 222 606 160 608 C98 606 64 596 64 576 Z"/>
-                  <path class="part" data-part="Retrovisor izquierdo" d="M64 234 L44 230 C36 230 34 252 44 254 L64 252 Z"/>
-                  <path class="part" data-part="Retrovisor derecho" d="M256 234 L276 230 C284 230 286 252 276 254 L256 252 Z"/>
-                  <!-- detalles: faros, pilotos, manetas -->
-                  <path class="deco deco--light" d="M74 66 C84 54 102 48 120 46 L118 56 C102 58 88 62 78 72 Z"/>
-                  <path class="deco deco--light" d="M246 66 C236 54 218 48 200 46 L202 56 C218 58 232 62 242 72 Z"/>
-                  <path class="deco deco--tail" d="M70 586 L104 592 L102 598 L72 594 Z"/>
-                  <path class="deco deco--tail" d="M250 586 L216 592 L218 598 L248 594 Z"/>
-                  <path class="deco" d="M72 300 h14 M72 420 h14 M234 300 h14 M234 420 h14"/>
-                  <path class="deco" d="M160 104 V206" opacity=".35"/>
-                </svg>
-
-                <div class="blueprint__tip" role="status" aria-live="polite"></div>
               </div>
-
-              <div class="blueprint__foot">
-                <p class="blueprint__hint">Toca una pieza para marcarla · vuelve a tocar para quitarla</p>
-                <button class="blueprint__reset" type="button" data-reset>Borrar todo</button>
+                <div class="pop" id="pop" hidden>
+                  <div class="pop__cab"><b id="popZona">Pieza</b><button type="button" class="pop__x" id="popX" aria-label="Cerrar">✕</button></div>
+                  <p class="pop__lbl">Tipo de daño</p>
+                  <div class="pop__tipos" id="popTipos">
+                    <button type="button" data-t="arañazo"><svg viewBox="0 0 24 24"><path d="M4 18 L11 11 M8 20 L18 10 M13 19 L20 12"/></svg>Arañazo</button>
+                    <button type="button" data-t="bollo"><svg viewBox="0 0 24 24"><path d="M3 9 C8 9 8 15 12 15 C16 15 16 9 21 9"/></svg>Bollo</button>
+                    <button type="button" data-t="golpe"><svg viewBox="0 0 24 24"><path d="M12 3 L14 9 L20 7 L16 12 L21 16 L14.5 15.5 L13 21 L10.5 15.5 L4 17 L8 12 L3 7 L9.5 9 Z"/></svg>Golpe o rotura</button>
+                    <button type="button" data-t="pintar"><svg viewBox="0 0 24 24"><path d="M4 20 L10 14 M14 4 l6 6 -8 8 -6 -6 z"/></svg>Pintura</button>
+                  </div>
+                  <p class="pop__lbl">Gravedad</p>
+                  <div class="pop__grav" id="popGrav">
+                    <button type="button" data-g="leve">Leve</button><button type="button" data-g="media" class="on">Media</button><button type="button" data-g="grave">Grave</button>
+                  </div>
+                  <div class="pop__acc"><button type="button" class="pop__borrar" id="popBorrar" hidden>Quitar</button><button type="button" class="pop__ok" id="popOk" disabled>Marcar daño</button></div>
+                </div>
+              <div class="peri__pie">
+                <p><span class="peri__punto"></span>Toca el punto exacto · puedes marcar varios y en todas las vistas</p>
+                <button class="peri__borrar" type="button" data-reset>Borrar todo</button>
               </div>
             </div>
 
@@ -613,7 +564,7 @@
         <p><b>Síguenos</b><a href="https://www.facebook.com/NordAuto-Markina-61567149416049" target="_blank" rel="noopener">Facebook</a></p>
       </div>
     </div>
-    <p class="wrap footer__legal" style="opacity:.7">Modelo 3D del coche de la portada: "Car Concept" de Khronos Group (glTF Sample Assets), licencia CC BY 4.0, con materiales y animación propios. Los colores del selector son de muestra.</p>
+    <p class="wrap footer__legal" style="opacity:.7">Modelo 3D del coche: Ferrari 458 Italia de vicent091036 (vía los ejemplos de three.js), licencia CC BY 4.0, con materiales y animación propios. Ferrari es una marca de su titular; el coche se usa solo como ilustración. Los colores del selector son de muestra.</p>
     <p class="wrap footer__legal">© <span data-year>2026</span> Nord-Auto Markina · Aviso legal · Privacidad</p>
   </footer>
 
@@ -632,7 +583,9 @@
     <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Siguiente">›</button>
   </dialog>
 
-  <script src="js/main.js?v=2" defer></script>
-  <script src="js/vivo.js?v=2" defer></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="js/main.js?v=6" defer></script>
+  <script src="js/vivo.js?v=6" defer></script>
+  <script src="js/parte.js?v=6" defer></script>
 </body>
 </html>

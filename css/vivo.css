@@ -168,3 +168,8 @@
 .capa.abajo[data-fase^="0.9"] { bottom: calc(92px + env(safe-area-inset-bottom)); }
 .colores { margin-bottom: 28px !important; }
 @media (min-width: 861px) { .capa.abajo[data-fase^="0.9"] { bottom: 10vh; } }
+
+/* desplazamiento suave con rueda (Lenis) */
+html.lenis, html.lenis body { height: auto; }
+html.lenis { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
